@@ -1,15 +1,38 @@
+import os
 from bs4 import BeautifulSoup, NavigableString, Tag
 import ftfy
-import requests
 from src import config
-from src.utils import safe_request
+from src.utils import safe_request, ensure_dir
+
+# --- SCRAPING ---
+def save_raw_html(html, lang, book, chapter):
+    """
+    Guarda el HTML crudo en data/raw/<lang>/<BOOK><chapter>.htm
+    """
+    ensure_dir(f"{config.RAW_DIR}/{lang}/")
+    filename = f"{book}{chapter:02d}.htm"
+    path = os.path.join(config.RAW_DIR, lang, filename)
+    with open(path, "w", encoding="utf-8") as f:
+        f.write(html)
 
 def build_url(language: str, book: str, chapter: int) -> str:
     base = config.BASE_URL_AWAJUN if language == "awajun" else config.BASE_URL_SPANISH
     return f"{base}{book}{chapter:02d}.htm"
 
-def get_verses(url, timeout=config.TIMEOUT):
-    html = requests.get(url,timeout=timeout).content.decode("utf-8", errors="ignore")
+def get_verses(url, lang, book, chapter, timeout=config.TIMEOUT):
+    """
+    Descarga y parsea los versículos de un capítulo.
+    También guarda el HTML crudo en data/raw/ por idioma.
+    """
+    response = safe_request(url, timeout)
+    if response is None:
+        return {}  # si falla la descarga
+
+    html = response.content.decode("utf-8", errors="ignore")
+
+    # Guardar copia del HTML crudo
+    save_raw_html(html, lang, book, chapter)
+
     soup = BeautifulSoup(html, "html.parser")
 
     verses = {}

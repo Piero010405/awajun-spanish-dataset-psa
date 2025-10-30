@@ -10,7 +10,7 @@ def main():
             for lang in ["awajun", "spanish"]:
                 url = build_url(lang, book, ch)
                 print(f"Descargando {book} {ch} ({lang}) → {url}")
-                verses = get_verses(url, timeout=config.TIMEOUT)
+                verses = get_verses(url, lang, book, ch, timeout=config.TIMEOUT)
                 if verses:
                     save_verses(verses, lang, book, ch)
 
