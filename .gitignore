@@ -3,6 +3,24 @@ __pycache__/
 *.py[codz]
 *$py.class
 
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.log
+*.DS_Store
+.env
+venv/
+
+# Dataset folders
+data/raw/
+data/processed/
+outputs/
+
+# Jupyter checkpoints
+.ipynb_checkpoints/
+
 # C extensions
 *.so
 

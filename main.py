@@ -8,7 +8,7 @@ def main():
     for book, info in BOOKS.items():
         chapters = info["chapters"]
 
-        # Validacion por si tenemos Libros completos o solo numero de capitulos
+        # Validar si chapters es int o lista
         if isinstance(chapters, int):
             chapters = range(1, chapters + 1)
 
@@ -17,14 +17,16 @@ def main():
                 url = build_url(lang, book, ch)
                 print(f"Descargando {book} {ch} ({lang}) → {url}")
 
-                verses = get_verses(url, lang, book, ch, timeout=config.TIMEOUT)
-                if verses:
-                    save_verses(verses, lang, book, ch)
+                try:
+                    verses = get_verses(url, lang, book, ch, timeout=config.TIMEOUT)
+                    if verses:
+                        save_verses(verses, lang, book, ch)
+                except Exception as e:
+                    print(f"⚠️ Error procesando {book} {ch} ({lang}): {e}")
 
     print("Construyendo dataset final...")
     build_dataset()
     print("✅ Dataset generado correctamente.")
-
 
 if __name__ == "__main__":
     main()

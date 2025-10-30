@@ -16,8 +16,24 @@ def save_raw_html(html, lang, book, chapter):
         f.write(html)
 
 def build_url(language: str, book: str, chapter: int) -> str:
+    """
+    Genera la URL dinámica según el idioma, libro y capítulo.
+    Usa 3 dígitos solo si el libro tiene más de 99 capítulos (como Salmos).
+    """
+    from src.books_dict import BOOKS  # evita import circular
+
+    info = BOOKS[book]
+    chapters = info["chapters"]
+
+    # Determinar el número máximo de capítulos
+    max_ch = max(chapters) if isinstance(chapters, list) else chapters
+
+    # Formatear con 2 o 3 dígitos según corresponda
+    pad = 3 if max_ch >= 100 else 2
+    chapter_str = f"{chapter:0{pad}d}"
+
     base = config.BASE_URL_AWAJUN if language == "awajun" else config.BASE_URL_SPANISH
-    return f"{base}{book}{chapter:02d}.htm"
+    return f"{base}/{book}{chapter_str}.htm"
 
 def get_verses(url, lang, book, chapter, timeout=config.TIMEOUT):
     """
