@@ -4,8 +4,8 @@ import ftfy
 
 TIME_OUT = 20
 
-def get_verses(url):
-    html = requests.get(url,timeout=TIME_OUT).content.decode("utf-8", errors="ignore")
+def get_verses(url, timeout):
+    html = requests.get(url,timeout=timeout).content.decode("utf-8", errors="ignore")
     soup = BeautifulSoup(html, "html.parser")
 
     verses = {}
@@ -44,4 +44,4 @@ def get_verses(url):
 
     return verses
 
-print(get_verses("https://ebible.org/spabes/GEN04.htm"))
+print(get_verses("https://ebible.org/spabes/GEN04.htm", TIME_OUT))
