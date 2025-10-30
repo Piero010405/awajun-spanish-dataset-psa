@@ -14,9 +14,9 @@ __pycache__/
 venv/
 
 # Dataset folders
-data/raw/
-data/processed/
-outputs/
+# data/raw/
+# data/processed/
+# outputs/
 
 # Jupyter checkpoints
 .ipynb_checkpoints/
